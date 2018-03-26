@@ -1,0 +1,1 @@
+{'sender': {'id': '1550692138327194'}, 'recipient': {'id': '111217299538882'}, 'timestamp': 1522095070219, 'message': {'mid': 'mid.$cAAA_1b47iDlolTTkC1iY--ZVhqzf', 'seq': 35075, 'text': 'Hey'}}

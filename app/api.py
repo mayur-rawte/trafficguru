@@ -19,100 +19,102 @@ class TraffiGuruAPI(Resource):
             return int(return_challenge)
     def post(self):
         incoming_message = request.get_json()
-        for entry in incoming_message['entry']:
-            for message in entry['messaging']:
-                fbid = message['sender']['id']
-                if 'message' in message:
-                    obj = open('traffictest.txt', 'w+')
-                    obj.write(str(message))
-                    if 'text' in message['message']:
-                        custresponse = 'Hi! Nice to see you here. I am TrafficGuru. Yeah Thats what my friends call me coz i know everything about traffic, and probably you are here to get some knowledge about traffic signals. No worries i will master you in that. So lets Start.'
-                        post_facebook_message(message['sender']['id'], custresponse, 1)
-                        custresponsebtn = {"recipient": {"id": fbid}, "message": {"attachment": {"type": "template",
-                                                                                                 "payload": {
-                                                                                                     "template_type": "button",
-                                                                                                     "text": "So lets get ready !",
-                                                                                                     "buttons": [{
-                                                                                                                     "type": "postback",
-                                                                                                                     "title": "READY",
-                                                                                                                     "payload": "Ready"}]}}}}
-                        post_facebook_message(fbid, custresponsebtn, 4)
-                    else:
-                        post_facebook_message(message['sender']['id'], message['message']['attachments'], 2)
-                elif 'postback' in message:
-                    text = message['postback']['payload']
-                    if text == 'GET_STARTED_PAYLOAD':
-                        custresponse = 'Hi! Nice to see you here. I am TrafficGuru. Yeah Thats what my friends call me coz i know everything about traffic, and probably you are here to get some knowledge about traffic signals. No worries i will master you in that. So lets Start.'
-                        post_facebook_message(message['sender']['id'], custresponse, 1)
-                        custresponsebtn = {"recipient":{"id":fbid }, "message":{"attachment":{"type":"template", "payload":{"template_type":"button", "text":"So lets get ready !", "buttons":[{"type":"postback", "title":"READY", "payload":"Ready"} ] } } } }
-                        post_facebook_message(fbid, custresponsebtn, 4)
-                    elif text == 'Ready':
-                        firstData = {"recipient": {"id": fbid}, "message": {"attachment": {"type": "template",
-                                                                                           "payload": {
-                                                                                               "template_type": "generic",
-                                                                                               "elements": [{"title":
-                                                                                                                 trafficData[
-                                                                                                                     'trafficData'][
-                                                                                                                     0][
-                                                                                                                     'signalName'],
-                                                                                                             "image_url":
-                                                                                                                 trafficData[
-                                                                                                                     'trafficData'][
-                                                                                                                     0][
-                                                                                                                     'SignalUrl']}]}}}}
-                        post_facebook_message(fbid, firstData, 4)
-                        firstDataText = trafficData['trafficData'][0]['SignlaDescription']
-                        post_facebook_message(fbid, firstDataText, 1)
-                        custresponsebtn = {"recipient": {"id": fbid}, "message": {"attachment": {"type": "template",
-                                                                                                 "payload": {
-                                                                                                     "template_type": "button",
-                                                                                                     "text": "That was Great !",
-                                                                                                     "buttons": [{
-                                                                                                                     "type": "postback",
-                                                                                                                     "title": "Next",
-                                                                                                                     "payload": "1"}]}}}}
-                        post_facebook_message(fbid, custresponsebtn, 4)
-                    else:
-                        try:
-                            nextData = {"recipient": {"id": fbid}, "message": {"attachment": {"type": "template",
-                                                                                               "payload": {
-                                                                                                   "template_type": "generic",
-                                                                                                   "elements": [{"title":
-                                                                                                                     trafficData[
-                                                                                                                         'trafficData'][
-                                                                                                                         int(text)][
-                                                                                                                         'signalName'],
-                                                                                                                 "image_url":
-                                                                                                                     trafficData[
-                                                                                                                         'trafficData'][
-                                                                                                                         int(text)][
-                                                                                                                         'SignalUrl']}]}}}}
-                            post_facebook_message(fbid, nextData, 4)
-                            nextDataText = trafficData['trafficData'][int(text)]['SignlaDescription']
-                            post_facebook_message(fbid, nextDataText, 1)
-                            custresponsebtn = {"recipient": {"id": fbid}, "message": {"attachment": {"type": "template",
-                                                                                                     "payload": {
-                                                                                                         "template_type": "button",
-                                                                                                         "text": "That was Great !",
-                                                                                                         "buttons": [{
-                                                                                                             "type": "postback",
-                                                                                                             "title": "Next",
-                                                                                                             "payload": int(text)+1}]}}}}
+        if 'entry' in incoming_message:
+            for entry in incoming_message['entry']:
+                if 'messaging' in entry:
+                    for message in entry['messaging']:
+                        fbid = message['sender']['id']
+                        if 'message' in message:
+                            obj = open('traffictest.txt', 'w+')
+                            obj.write(str(message))
+                            if 'text' in message['message']:
+                                custresponse = 'Hi! Nice to see you here. I am TrafficGuru. Yeah Thats what my friends call me coz i know everything about traffic, and probably you are here to get some knowledge about traffic signals. No worries i will master you in that. So lets Start.'
+                                post_facebook_message(message['sender']['id'], custresponse, 1)
+                                custresponsebtn = {"recipient": {"id": fbid}, "message": {"attachment": {"type": "template",
+                                                                                                        "payload": {
+                                                                                                            "template_type": "button",
+                                                                                                            "text": "So lets get ready !",
+                                                                                                            "buttons": [{
+                                                                                                                            "type": "postback",
+                                                                                                                            "title": "READY",
+                                                                                                                            "payload": "Ready"}]}}}}
+                                post_facebook_message(fbid, custresponsebtn, 4)
+                            else:
+                                post_facebook_message(message['sender']['id'], message['message']['attachments'], 2)
+                        elif 'postback' in message:
+                            text = message['postback']['payload']
+                            if text == 'GET_STARTED_PAYLOAD':
+                                custresponse = 'Hi! Nice to see you here. I am TrafficGuru. Yeah Thats what my friends call me coz i know everything about traffic, and probably you are here to get some knowledge about traffic signals. No worries i will master you in that. So lets Start.'
+                                post_facebook_message(message['sender']['id'], custresponse, 1)
+                                custresponsebtn = {"recipient":{"id":fbid }, "message":{"attachment":{"type":"template", "payload":{"template_type":"button", "text":"So lets get ready !", "buttons":[{"type":"postback", "title":"READY", "payload":"Ready"} ] } } } }
+                                post_facebook_message(fbid, custresponsebtn, 4)
+                            elif text == 'Ready':
+                                firstData = {"recipient": {"id": fbid}, "message": {"attachment": {"type": "template",
+                                                                                                "payload": {
+                                                                                                    "template_type": "generic",
+                                                                                                    "elements": [{"title":
+                                                                                                                        trafficData[
+                                                                                                                            'trafficData'][
+                                                                                                                            0][
+                                                                                                                            'signalName'],
+                                                                                                                    "image_url":
+                                                                                                                        trafficData[
+                                                                                                                            'trafficData'][
+                                                                                                                            0][
+                                                                                                                            'SignalUrl']}]}}}}
+                                post_facebook_message(fbid, firstData, 4)
+                                firstDataText = trafficData['trafficData'][0]['SignlaDescription']
+                                post_facebook_message(fbid, firstDataText, 1)
+                                custresponsebtn = {"recipient": {"id": fbid}, "message": {"attachment": {"type": "template",
+                                                                                                        "payload": {
+                                                                                                            "template_type": "button",
+                                                                                                            "text": "That was Great !",
+                                                                                                            "buttons": [{
+                                                                                                                            "type": "postback",
+                                                                                                                            "title": "Next",
+                                                                                                                            "payload": "1"}]}}}}
+                                post_facebook_message(fbid, custresponsebtn, 4)
+                            else:
+                                try:
+                                    nextData = {"recipient": {"id": fbid}, "message": {"attachment": {"type": "template",
+                                                                                                    "payload": {
+                                                                                                        "template_type": "generic",
+                                                                                                        "elements": [{"title":
+                                                                                                                            trafficData[
+                                                                                                                                'trafficData'][
+                                                                                                                                int(text)][
+                                                                                                                                'signalName'],
+                                                                                                                        "image_url":
+                                                                                                                            trafficData[
+                                                                                                                                'trafficData'][
+                                                                                                                                int(text)][
+                                                                                                                                'SignalUrl']}]}}}}
+                                    post_facebook_message(fbid, nextData, 4)
+                                    nextDataText = trafficData['trafficData'][int(text)]['SignlaDescription']
+                                    post_facebook_message(fbid, nextDataText, 1)
+                                    custresponsebtn = {"recipient": {"id": fbid}, "message": {"attachment": {"type": "template",
+                                                                                                            "payload": {
+                                                                                                                "template_type": "button",
+                                                                                                                "text": "That was Great !",
+                                                                                                                "buttons": [{
+                                                                                                                    "type": "postback",
+                                                                                                                    "title": "Next",
+                                                                                                                    "payload": int(text)+1}]}}}}
 
-                            a = open("debugorder.txt","w+")
-                            a.write(json.dumps(custresponsebtn))
-                            a.close()
-                            post_facebook_message(fbid, custresponsebtn, 4)
-                        except:
-                            post_facebook_message(fbid, 'That was all i know, I will be back with some more info. Till then Bye !', 1)
-                        #else:
-                         #   res = "You now have knowledge of some important traffic signals. I will update myself and get back to you. Thanks"
-                         #   post_facebook_message(fbid, custresponsebtn, 1)
-                        #custresponse = 'Ruko ! mujhe sikhne de fir tumhe sikhaata hu'
-                        #post_facebook_message(message['sender']['id'], custresponse, 1)
+                                    a = open("debugorder.txt","w+")
+                                    a.write(json.dumps(custresponsebtn))
+                                    a.close()
+                                    post_facebook_message(fbid, custresponsebtn, 4)
+                                except:
+                                    post_facebook_message(fbid, 'That was all i know, I will be back with some more info. Till then Bye !', 1)
+                                #else:
+                                #   res = "You now have knowledge of some important traffic signals. I will update myself and get back to you. Thanks"
+                                #   post_facebook_message(fbid, custresponsebtn, 1)
+                                #custresponse = 'Ruko ! mujhe sikhne de fir tumhe sikhaata hu'
+                                #post_facebook_message(message['sender']['id'], custresponse, 1)
 
 def post_facebook_message(fbid, recevied_message,mtype):
-    post_message_url = 'https://graph.facebook.com/v2.9/me/messages?access_token=EAAJrxDp25AwBALee6mEVe9k63GqJmZBzPaCKAPRZBJQ4lzrIbtVTWF4usMGvl77GciY2TmsMvUcyYgcM10NkaDdpn55EcYm47hz1ul4nVWsZBLGYw8RofX2WX46ZBxCHgbbfo0VS2asppm4HZBrlDv9gnmFJ7bavpPfIkoqouzdPWhztrOPlM'
+    post_message_url = 'https://graph.facebook.com/v2.9/me/messages?access_token=EAAJrxDp25AwBACKd9YjPDkPFn94ZCm50PK9uvC2MQ2QbmZC1enqmx7wOyl0ZCj6kaYNT1hHeP4kLiN93tuT2NKDmiRINaVLfKZBslYtNHwaDOEorWYwhwzlm775aujZBdVeSfCa0iwThT0ffCNZClyYGlbqF1BqtYSSIjVXnojhUvlkWXdjF1I'
     if mtype == 1:
         response_msg = json.dumps({"recipient":{"id":fbid}, "message": {"text":recevied_message}})
     elif mtype == 2:

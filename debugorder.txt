@@ -1,0 +1,1 @@
+{"recipient": {"id": "1550692138327194"}, "message": {"attachment": {"type": "template", "payload": {"template_type": "button", "text": "That was Great !", "buttons": [{"type": "postback", "title": "Next", "payload": 4}]}}}}
